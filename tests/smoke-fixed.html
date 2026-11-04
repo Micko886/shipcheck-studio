@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- 修复后的对照页：用于验证「复测」能否识别已修复与新增。不是产品页面。 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShipCheck 修复对照页</title>
+  <meta name="description" content="用于验证 ShipCheck 复测能力的对照页面，包含已修复的响应式、链接、图片与表单缺陷。">
+  <link rel="canonical" href="http://127.0.0.1:8799/">
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; color: #111; background: #fff; }
+    .wrap { max-width: 100%; padding: 12px; }
+    .hero { max-width: 100%; height: 60px; background: #eef; }
+    form { display: grid; gap: 6px; max-width: 420px; }
+    label { font-size: 13px; }
+    input, textarea, button { font: inherit; padding: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>修复对照页</h1>
+    <div class="hero">自适应容器</div>
+    <p>这是一段正常对比度的正文，用于验证低对比度规则不再命中。</p>
+    <a href="/contact">Contact</a>
+    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="占位图片" width="40" height="40">
+
+    <form id="lead" action="/api/lead" method="post" novalidate>
+      <label for="f-email">Email（必填）*</label>
+      <input id="f-email" name="email" type="email" autocomplete="email" required>
+      <label for="f-phone">联系电话（必填）*</label>
+      <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+      <label for="f-company">公司名称（必填）*</label>
+      <input id="f-company" name="company" type="text" autocomplete="organization" required>
+      <input type="text" name="hp_website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+      <div role="alert" aria-live="polite" id="form-error"></div>
+      <button type="submit">提交询盘</button>
+      <button type="button">取消</button>
+    </form>
+  </div>
+</body>
+</html>

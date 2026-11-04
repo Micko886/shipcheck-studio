@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- 冒烟测试页：故意包含已知缺陷，供扫描引擎自测。不是产品页面。 -->
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+  <div style="width:1200px;background:#eef;height:60px">固定宽度容器</div>
+  <div style="overflow:hidden;height:18px">这是一段被固定高度裁切的文本内容，用来验证文本裁切规则是否能够被发现。</div>
+  <a href="#">Contact</a>
+  <a href="#does-not-exist">跳转到不存在的区块</a>
+  <a href="/ok"><span></span></a>
+  <img src="/definitely-missing-image.png">
+  <img src="/also-missing.png" alt="有 alt 的图片">
+  <!-- 表单交付缺陷：字段缺 name、按钮缺 type、无错误容器、type 与语义不符、无 autocomplete -->
+  <form id="lead">
+    <label for="f-email">Email</label>
+    <input id="f-email" type="text" placeholder="you@example.com">
+    <label for="f-phone">联系电话</label>
+    <input id="f-phone" type="text" name="phone">
+    <input type="text" name="company" required>
+    <button>提交</button>
+    <button>取消</button>
+  </form>
+  <!-- 完全没有任何可提交控件的表单 -->
+  <form id="no-submit"><input name="q1" type="text"><input name="q2" type="email"></form>
+  <!-- 混合内容提交（页面为 https 时才触发规则） -->
+  <form id="mixed" action="http://insecure.example.com/lead" method="post">
+    <input name="email" type="email" required>
+    <textarea name="message" rows="2"></textarea>
+    <button type="submit">Send</button>
+  </form>
+  <p style="color:#ccc;background:#fff">低对比度文字 low contrast text</p>
+  <h2>章节</h2><h4>跳级的子标题</h4>
+  <button style="width:16px;height:16px">×</button>
+  <div role="dialog" aria-modal="true" style="position:absolute;left:360px;width:300px;height:80px;background:#fee">弹窗</div>
+
+  <pre id="out" style="display:none">PENDING</pre>
+  <script src="/src/vendor/axe.min.js"></script>
+  <script src="/src/content/axe-bridge.js"></script>
+  <script src="/src/content/search-audit.js"></script><script src="/src/content/scanner.js"></script>
+  <script>
+    (async () => {
+      const r = await window.__shipcheck.runScan({ widths: [390, 768, 1440], timeout: 2500, axeEnabled: true });
+      document.getElementById('out').textContent = 'SHIPCHECK_RESULT:' + JSON.stringify(r);
+    })();
+  </script>
+</body>
+</html>

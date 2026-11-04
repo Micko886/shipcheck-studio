@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "ShipCheck Studio — QA, SEO & Local Lighthouse",
+  "short_name": "ShipCheck",
+  "version": "1.0.1",
+  "description": "本地优先：一键 QA/SEO/GEO，按需使用本机 Lighthouse 检测页面速度、无障碍与基础 SEO。",
+  "minimum_chrome_version": "114",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "打开 ShipCheck AI 交付检查面板",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs",
+    "clipboardWrite"
+  ],
+  "optional_host_permissions": [
+    "*://*/*",
+    "http://127.0.0.1/*"
+  ],
+  "optional_permissions": [
+    "debugger"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "shipcheck-studio",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Local-first Chrome extension for website QA, SEO/GEO, accessibility and Lighthouse",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "test:local-runner": "node --test tests/local-runner.test.cjs"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

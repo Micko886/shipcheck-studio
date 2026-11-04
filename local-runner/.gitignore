@@ -1,0 +1,4 @@
+.shipcheck-token
+node_modules/
+reports/
+package-lock.json

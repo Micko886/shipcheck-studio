@@ -1,0 +1,9 @@
+{
+  "name": "shipcheck-local-lighthouse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ShipCheck 仅本机运行的 Lighthouse 检测服务",
+  "scripts": {"start":"node server.cjs", "test":"node --test ../tests/local-runner.test.cjs"},
+  "engines": {"node": ">=22.19"},
+  "dependencies": {"lighthouse":"^13.6.0"}
+}

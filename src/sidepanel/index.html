@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShipCheck Studio · 全站质量检查</title>
+  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../studio/technical-panel.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="hdr">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="34" height="34">
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color=" #108b7a"/><stop offset="1" stop-color="#0b615c"/>
+          </linearGradient></defs>
+          <path d="M20 2 L35 8 V19 C35 28 28.5 35 20 38 C11.5 35 5 28 5 19 V8 Z" fill="url(#lg)"/>
+          <path d="M12.5 20.5 L17.5 25.5 L28 14.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">ShipCheck <span>Studio</span></div>
+        <div class="brand-sub">Website QA · SEO/GEO · Local Lighthouse</div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <span class="ver">v1.0.0</span>
+      <button id="btn-settings" class="icon-btn" title="扫描设置" aria-label="扫描设置">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="privacy"><span class="dot"></span><span>本地优先 · Lighthouse 在本机运行 · 无云端中转</span><span id="mode-badge" class="mode-badge"></span></div>
+
+  <div class="urlbar">
+    <span class="url-label">当前页面</span>
+    <span id="page-url" class="url-text" title="">未连接</span>
+  </div>
+
+  <div class="scan-row">
+    <button id="btn-scan" class="scan-btn">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <span id="scan-label">一键扫描全站 · QA + SEO + GEO</span>
+    </button>
+    <button id="btn-site-scan" class="scan-btn secondary" title="仅扫描当前标签页，适合快速复测">仅扫<br>当前页</button>
+  </div>
+
+  <div id="progress" class="progress hidden">
+    <div class="progress-track"><i id="progress-fill"></i></div>
+    <div id="progress-text" class="progress-text">准备中…</div>
+  </div>
+
+  <div id="error-box" class="error-box hidden"></div>
+
+  <section class="score-card">
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 120 120" width="104" height="104">
+        <circle class="ring-bg" cx="60" cy="60" r="52"/>
+        <circle id="ring-fg" class="ring-fg" cx="60" cy="60" r="52"/>
+      </svg>
+      <div class="ring-center"><strong id="score-num">--</strong><span>/100</span></div>
+    </div>
+    <div class="score-side">
+      <div class="score-label">当前页技术检查分数</div>
+      <div id="score-desc" class="score-desc">尚未扫描</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-issues">0</b><span>发现的问题</span></div>
+        <div class="stat"><b id="stat-priority" class="danger">0</b><span>优先修复</span></div>
+        <div class="stat"><b id="stat-viewports">0</b><span>已检查视口</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="unified-summary" class="unified-summary" aria-live="polite"></div>
+  <div id="severity-bar" class="severity-bar"></div>
+  <div class="delivery-strip"><span class="delivery-mark">●</span><span id="delivery-chip">尚未扫描</span><button id="btn-open-inspector" class="mini-ghost" title="打开完整问题工作台">全屏检查 ↗</button></div>
+
+  <div class="tabs-wrap" aria-label="检查模块，支持左右滑动">
+    <button class="tab-arrow" id="tab-prev" type="button" aria-label="向左滚动标签" title="更多标签在左侧">‹</button>
+  <nav class="tabs" id="tabs" aria-label="扫描结果分类">
+    <button data-tab="project" class="active">扫描概览</button>
+    <button data-tab="issues">问题检查</button>
+    <button data-tab="search">SEO / GEO</button>
+    <button data-tab="speed">速度 / CWV</button>
+    <button data-tab="versions">版本对比</button>
+    <button data-tab="devices">设备预览</button>
+    <button data-tab="fixes">Agent 修复</button>
+    <button data-tab="report">报告</button>
+    <button data-tab="history">历史</button>
+  </nav>
+    <button class="tab-arrow" id="tab-next" type="button" aria-label="向右滚动标签" title="向右查看更多标签">›</button>
+  </div>
+
+  <main>
+    <section id="tab-project" class="tab-panel active">
+      <div id="project-overview"></div>
+      <div id="project-details" class="studio-block"></div>
+      <div id="project-plan" class="studio-block"></div>
+      <div id="project-workflow" class="studio-block"></div>
+    </section>
+    <section id="tab-search" class="tab-panel"><div id="search-readiness-root" class="studio-block"></div><div id="technical-audit-root"></div></section>
+    <section id="tab-speed" class="tab-panel"><div id="pagespeed-root"></div></section>
+    <section id="tab-issues" class="tab-panel">
+      <div id="site-issues-summary"></div>
+      <div id="filters" class="filters"></div>
+      <div id="issue-list" class="issue-list"></div>
+    </section>
+
+    <section id="tab-versions" class="tab-panel">
+      <div class="panel-hint">首次扫描建立基线；之后每次扫描自动与上一版对比：分数变化、新增问题、已修复问题与页面像素差异。这是「修改 → 复测 → 保留交付记录」闭环的核心。</div>
+      <div id="version-summary"></div>
+      <div id="visual-diff"></div>
+      <div id="site-pages"></div>
+    </section>
+
+    <section id="tab-devices" class="tab-panel">
+      <div class="panel-hint">视口检查优先使用当前真实页面。其他宽度的 iframe 结果属于有限覆盖，若被站点阻止会明确标记不可用。</div>
+      <div id="device-list" class="device-list"></div>
+    </section>
+
+    <section id="tab-fixes" class="tab-panel">
+      <div class="panel-hint">每条指令都包含复现步骤、DOM 定位、证据、可能原因、修复要求与复测清单，可直接粘贴到 Cursor / Claude Code / Copilot。</div>
+      <div class="fix-toolbar">
+        <button id="btn-copy-all" class="btn solid">复制全部修复指令</button>
+        <button id="btn-export-agent" class="btn">导出 Agent 任务包</button>
+        <span id="fix-count" class="muted"></span>
+      </div>
+      <div id="fix-list" class="fix-list"></div>
+    </section>
+
+    <section id="tab-report" class="tab-panel">
+      <div id="report-summary"></div>
+      <div class="export-row">
+        <button id="btn-export-md" class="btn solid">导出 Markdown 检查报告</button>
+        <button id="btn-export-json" class="btn">导出 JSON 原始数据</button>
+      </div>
+      <div class="export-row">
+        <button id="btn-copy-pr" class="btn">复制 PR 评论</button>
+        <button id="btn-copy-ci" class="btn">复制 CI 步骤片段</button>
+      </div>
+      <div id="report-verify"></div>
+      <div id="report-notes"></div>
+      <div class="disclaimer">
+        <b>能力边界</b>：本工具基于确定性规则与启发式检查，不能替代完整的 WCAG 审计、SEO 审计或端到端业务测试；也不会承诺发现全部问题。高优先级缺陷均保留可复现证据，启发式检查与未覆盖的业务流程应保留不确定性。
+      </div>
+    </section>
+
+    <section id="tab-history" class="tab-panel">
+      <div class="history-head">
+        <span class="muted">最近 12 次扫描（保存在本机）</span>
+        <button id="btn-clear-history" class="btn tiny">清空</button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+  </main>
+
+  <footer class="foot">发现问题 → 展示证据 → 定位原因 → 给出修复方案 → 修复后重新验证</footer>
+</div>
+
+<!-- 设置抽屉 -->
+<div id="settings" class="drawer hidden">
+  <div class="drawer-head"><b>扫描设置</b><button id="btn-close-settings" class="icon-btn">✕</button></div>
+  <div class="drawer-body">
+    <div class="field-title">检查视口</div>
+    <label class="check"><input type="checkbox" data-width="390" checked> 390px · 手机</label>
+    <label class="check"><input type="checkbox" data-width="768" checked> 768px · 平板</label>
+    <label class="check"><input type="checkbox" data-width="1440" checked> 1440px · 桌面</label>
+    <div class="field-title">检测模块</div>
+    <label class="check"><input type="checkbox" data-module="responsive" checked> A · Responsive QA</label>
+    <label class="check"><input type="checkbox" data-module="interaction" checked> B · Interaction QA</label>
+    <label class="check"><input type="checkbox" data-module="visual" checked> C · Visual QA</label>
+    <label class="check"><input type="checkbox" data-module="a11y" checked> D · Accessibility</label>
+    <label class="check"><input type="checkbox" data-module="seo" checked> E · Technical SEO</label>
+    <label class="check"><input type="checkbox" data-module="geo" checked> F · GEO / AEO 内容线索</label>
+    <label class="check"><input type="checkbox" data-module="business" checked> G · 表单结构检查（不生成手动验收项）</label>
+    <div class="field-title">本地 Lighthouse（无需 Google PageSpeed API）</div>
+    <label class="check"><input type="checkbox" id="opt-auto-local-lighthouse"> 一键扫描后自动抽样检测页面速度（Mobile + Desktop）</label>
+    <p class="drawer-note">默认启用。需先在「速度 / CWV」连接本机 Lighthouse 运行器；仅本地处理检测任务，不传送 URL 给 ShipCheck 或 Google PageSpeed 云端。可设置抽样 1–20 页，其他页面继续使用本地规则检测。</p>
+    <div class="field-title">检测引擎</div>
+    <label class="check"><input type="checkbox" id="opt-axe" checked> 启用 axe-core 无障碍规则（若被页面 CSP 阻止则自动回退）</label>
+    <div class="field-title">视觉基线与版本对比（V2 / V3）</div>
+    <label class="check"><input type="checkbox" id="opt-baseline" checked> 扫描时保存截图基线并计算像素差异</label>
+    <label class="check"><input type="checkbox" id="opt-precise-shot"> 多视口精确截图（390 / 768 / 1440，需授权 debugger）</label>
+    <label class="check"><span>一键全站扫描页面上限</span>
+      <select id="opt-max-pages"><option value="10">10 页</option><option value="20" selected>20 页</option><option value="50">50 页</option><option value="100">100 页</option></select>
+    </label>
+    <button id="btn-reset-baseline" class="btn">把当前截图设为新基线</button>
+    <p class="drawer-note">默认用<strong>标签页截图</strong>只覆盖当前视口。打开「多视口精确截图」后会申请 <code>debugger</code> 权限，对每个视口真实设置尺寸再截图——浏览器顶部会因此显示「正在调试此浏览器」提示条，关掉开关即可撤销。截图只在本地比较，不上传。一键扫描会申请当前站点的读取权限；先抓取 robots、Sitemap 与内部链接，随后逐页执行 QA/SEO/GEO 检查并自动关闭临时标签页。大站受页面上限约束，未覆盖页面会明确列出，不会声称全站全部通过。</p>
+    <button id="btn-reset-settings" class="btn">恢复默认</button>
+  </div>
+</div>
+
+<!-- 标注截图弹窗 -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head"><b id="modal-title">问题证据截图</b><button id="btn-close-modal" class="icon-btn">✕</button></div>
+    <div id="modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../studio/core.js"></script>
+<script src="../content/issue-explainer.js"></script>
+
+<script src="../content/search-audit.js"></script>
+<script src="../studio/search-panel.js"></script>
+<script src="../studio/technical-audit.js"></script>
+<script src="../studio/performance-import.js"></script>
+<script src="../studio/technical-panel.js"></script>
+<script src="../studio/panel.js"></script>
+<script src="../studio/local-lighthouse-panel.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

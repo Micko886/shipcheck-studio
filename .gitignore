@@ -1,0 +1,32 @@
+# Local-only credentials and configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+**/.shipcheck-token
+**/*-token.json
+
+# Dependencies and build
+node_modules/
+**/node_modules/
+coverage/
+dist/
+build/
+.tmp/
+.cache/
+
+# Generated reports and local site data
+**/reports/
+**/screenshots/
+**/scan-exports/
+*.log
+*.trace
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
